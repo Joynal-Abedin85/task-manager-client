@@ -13,6 +13,8 @@ import Signup from './component/Signup.jsx';
 import Privateroute from './component/Privateroute.jsx';
 import Eror from './pages/Eror.jsx';
 import Home from './pages/Home.jsx';
+import Addtask from './pages/Addtask.jsx';
+import Mytask from './pages/Mytask.jsx';
 
 const router = createBrowserRouter([
   {
@@ -33,7 +35,15 @@ const router = createBrowserRouter([
         path: '/signup',
         element: <Signup></Signup>
       },
-      
+      {
+        path: '/addtask',
+        element: <Addtask></Addtask>
+      },
+      {
+        path: '/mytask',
+        element: <Mytask></Mytask>
+      }
+
 
     ]
   },

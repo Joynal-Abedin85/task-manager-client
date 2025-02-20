@@ -26,10 +26,10 @@ const Header = () => {
         <NavLink to='/allvisa'>All visa</NavLink>
       </li>
       <li>
-        <NavLink to='/addvisa'>add visa</NavLink>
+        <NavLink to='/addtask'>add task</NavLink>
       </li>
       <li>
-        <NavLink to='/myvisa'>my visa</NavLink>
+        <NavLink to='/mytask'>my task</NavLink>
       </li>
       <li>
         <NavLink to='/application'>my visa application</NavLink>
