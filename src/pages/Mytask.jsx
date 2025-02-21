@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import Swal from 'sweetalert2';
 
 
 const Mytask = () => {
@@ -10,6 +11,12 @@ const Mytask = () => {
         "In Progress": [],
         "Done": [],
       });
+
+      const [editTask, setEditTask] = useState(null);
+      const [editedTitle, setEditedTitle] = useState("");
+      const [editedDescription, setEditedDescription] = useState("");
+    
+    
     
       useEffect(() => {
         fetchTasks();
@@ -49,6 +56,41 @@ const Mytask = () => {
           });
         }
       };
+
+      const handleDelete = async (taskId) => {
+        const confirm = await Swal.fire({
+          title: "Are you sure?",
+          text: "This task will be permanently deleted!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Yes, delete it!",
+          cancelButtonText: "Cancel",
+        });
+    
+        if (confirm.isConfirmed) {
+          await axios.delete(`http://localhost:5000/tasks/${taskId}`);
+          Swal.fire("Deleted!", "Your task has been deleted.", "success");
+          fetchTasks();
+        }
+      };
+    
+      const handleEdit = (task) => {
+        setEditTask(task);
+        setEditedTitle(task.title);
+        setEditedDescription(task.description);
+      };
+    
+      const saveEdit = async () => {
+        await axios.put(`http://localhost:5000/tasks/${editTask._id}`, {
+          title: editedTitle,
+          description: editedDescription,
+        });
+    
+        setEditTask(null);
+        Swal.fire("Updated!", "Your task has been updated.", "success");
+        fetchTasks();
+      };
+    
     
     return (
         <div className="h-screen bg-gradient-to-br from-green-400 to-blue-500 flex justify-center items-center p-5">
@@ -75,8 +117,24 @@ const Mytask = () => {
                               {...provided.dragHandleProps}
                               className="p-3 bg-white rounded shadow mb-2"
                             >
+                               <div>
                               <p className="font-semibold">{task.title}</p>
                               <p className="text-sm text-gray-600">{task.description}</p>
+                            </div>
+                            <div className="flex gap-2">
+                              <button
+                                onClick={() => handleEdit(task)}
+                                className="px-2 py-1 text-xs bg-blue-500 text-white rounded"
+                              >
+                                Edit
+                              </button>
+                              <button
+                                onClick={() => handleDelete(task?._id)}
+                                className="px-2 py-1 text-xs bg-red-500 text-white rounded"
+                              >
+                                Delete
+                              </button>
+                            </div>
                             </div>
                           )}
                         </Draggable>
@@ -89,6 +147,36 @@ const Mytask = () => {
             </div>
           </DragDropContext>
         </div>
+
+        {editTask && (
+        <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h2 className="text-xl font-bold mb-3">Edit Task</h2>
+            <input
+              type="text"
+              value={editedTitle}
+              onChange={(e) => setEditedTitle(e.target.value)}
+              className="w-full p-2 border rounded mb-2"
+            />
+            <textarea
+              value={editedDescription}
+              onChange={(e) => setEditedDescription(e.target.value)}
+              className="w-full p-2 border rounded mb-2"
+            ></textarea>
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={() => setEditTask(null)}
+                className="px-3 py-1 bg-gray-400 text-white rounded"
+              >
+                Cancel
+              </button>
+              <button onClick={saveEdit} className="px-3 py-1 bg-green-500 text-white rounded">
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       </div>
     );
 };
