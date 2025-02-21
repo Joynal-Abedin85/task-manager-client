@@ -22,21 +22,14 @@ const Header = () => {
       <li>
         <NavLink to='/'>home</NavLink>
       </li>
-      <li>
-        <NavLink to='/allvisa'>All visa</NavLink>
-      </li>
+    
       <li>
         <NavLink to='/addtask'>add task</NavLink>
       </li>
       <li>
         <NavLink to='/mytask'>my task</NavLink>
       </li>
-      <li>
-        <NavLink to='/application'>my visa application</NavLink>
-      </li>
-      <li>
-        <NavLink to='/support'>support and contect</NavLink>
-      </li>
+     
     </>
   );
   return (

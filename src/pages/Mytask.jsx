@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import Swal from 'sweetalert2';
+import { FaEdit, FaTrash } from 'react-icons/fa';
 
 
 const Mytask = () => {
@@ -93,21 +94,21 @@ const Mytask = () => {
     
     
     return (
-        <div className="h-screen bg-gradient-to-br from-green-400 to-blue-500 flex justify-center items-center p-5">
-        <div className="w-full max-w-5xl bg-white p-6 rounded-lg shadow-lg">
-          <h1 className="text-3xl font-bold text-center text-gray-800 mb-5">Task Manager</h1>
+        <div className="  bg-gradient-to-br from-green-400 to-blue-500 flex justify-center items-center p-10">
+        <div className="w-full overflow-y-auto my-10 h-screen  max-w-5xl bg-white p-6 rounded-lg shadow-lg">
+          <h1 className="text-3xl  font-bold text-center text-gray-800 mb-5">Task Manager</h1>
   
           <DragDropContext onDragEnd={handleDragEnd}>
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid  overflow-y-auto grid-cols-3 gap-4">
               {Object.keys(tasks).map((category) => (
                 <Droppable key={category} droppableId={category}>
                   {(provided) => (
                     <div
                       ref={provided.innerRef}
                       {...provided.droppableProps}
-                      className="bg-gray-200 p-4 rounded-lg min-h-[400px]"
+                      className="bg-gray-200  p-4 rounded-lg min-h-[400px]"
                     >
-                      <h2 className="text-xl font-semibold mb-3 text-gray-800">{category}</h2>
+                      <h2 className="text-xl  font-semibold mb-3 text-purple-700">{category}</h2>
                       {tasks[category].map((task, index) => (
                         <Draggable key={task._id} draggableId={task._id} index={index}>
                           {(provided) => (
@@ -115,24 +116,24 @@ const Mytask = () => {
                               ref={provided.innerRef}
                               {...provided.draggableProps}
                               {...provided.dragHandleProps}
-                              className="p-3 bg-white rounded shadow mb-2"
+                              className="p-3 bg-white rounded shadow-lg mb-2"
                             >
                                <div>
                               <p className="font-semibold">{task.title}</p>
                               <p className="text-sm text-gray-600">{task.description}</p>
                             </div>
-                            <div className="flex gap-2">
+                            <div className="flex mt-5 justify-between gap-2">
                               <button
                                 onClick={() => handleEdit(task)}
                                 className="px-2 py-1 text-xs bg-blue-500 text-white rounded"
                               >
-                                Edit
+                                <FaEdit size={18} />
                               </button>
                               <button
                                 onClick={() => handleDelete(task?._id)}
                                 className="px-2 py-1 text-xs bg-red-500 text-white rounded"
                               >
-                                Delete
+                                <FaTrash size={18} />
                               </button>
                             </div>
                             </div>

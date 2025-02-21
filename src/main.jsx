@@ -37,11 +37,11 @@ const router = createBrowserRouter([
       },
       {
         path: '/addtask',
-        element: <Addtask></Addtask>
+        element: <Privateroute><Addtask></Addtask></Privateroute>
       },
       {
         path: '/mytask',
-        element: <Mytask></Mytask>
+        element: <Privateroute><Mytask></Mytask></Privateroute>
       }
 
 
