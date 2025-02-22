@@ -47,12 +47,14 @@ const Addtask = () => {
               type="text"
               placeholder="Task Title"
               value={title}
+              maxLength={50}
               onChange={(e) => setTitle(e.target.value)}
               className="p-3 border bg-blue-200 text-black rounded-3xl w-full"
             />
             <textarea
               placeholder="Task Description"
               value={description}
+              maxLength={200}
               onChange={(e) => setDescription(e.target.value)}
               className="p-3 border bg-blue-200 text-black rounded-3xl w-full"
             />
