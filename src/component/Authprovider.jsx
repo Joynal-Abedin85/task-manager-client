@@ -33,11 +33,20 @@ const Authprovider = ({children}) => {
         return signInWithPopup(auth,googleprovider)
     }
 
+    useEffect(() => {
+      const unsub = onAuthStateChanged(auth, (currentUser)=>{
+          setuser(currentUser)
+          setloading(false)
+      });
+      return () =>  unsub();
+      
+  },[])
+
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`https://visa-sites.vercel.app/myvisa/${_id}`);
+        const response = await fetch(`http://localhost:5000/tasks`);
         if (!response.ok) {
           throw new Error('Failed to fetch data');
         }
@@ -53,15 +62,7 @@ const Authprovider = ({children}) => {
     fetchData();
   }, [])
 
-    useEffect(() => {
-        const unsub = onAuthStateChanged(auth, (cuser)=>{
-            setuser(cuser)
-            setloading(false)
-        });
-        return () => {
-            unsub
-        }
-    },[])
+ 
 
     const userinfo = {
         user,
@@ -71,7 +72,8 @@ const Authprovider = ({children}) => {
         setuser,
         logout,
         signingoogle,
-        data
+        data,
+        error
     }
     return (
         <Authcontext.Provider value={userinfo}>

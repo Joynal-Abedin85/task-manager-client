@@ -23,41 +23,96 @@ const Mytask = () => {
         fetchTasks();
       }, []);
     
-      const fetchTasks = async () => {
+    //   const fetchTasks = async () => {
+    //     const response = await axios.get("http://localhost:5000/tasks");
+    //     const categorizedTasks = {
+    //       "To-Do": response.data.filter((task) => task.category === "To-Do"),
+    //       "In Progress": response.data.filter((task) => task.category === "In Progress"),
+    //       "Done": response.data.filter((task) => task.category === "Done"),
+    //     };
+    //     setTasks(categorizedTasks);
+    //   };
+    
+    //   const handleDragEnd = async (result) => {
+    //     if (!result.destination) return;
+    
+    //     const { source, destination } = result;
+    //     const taskMoved = tasks[source.droppableId][source.index];
+    
+    //     if (source.droppableId !== destination.droppableId) {
+    //       // Update backend
+    //       await axios.put(`http://localhost:5000/tasks/${taskMoved._id}`, { category: destination.droppableId });
+    
+    //       // Update frontend state
+    //       const updatedSourceTasks = [...tasks[source.droppableId]];
+    //       updatedSourceTasks.splice(source.index, 1);
+    
+    //       const updatedDestTasks = [...tasks[destination.droppableId]];
+    //       updatedDestTasks.splice(destination.index, 0, { ...taskMoved, category: destination.droppableId });
+    
+    //       setTasks({
+    //         ...tasks,
+    //         [source.droppableId]: updatedSourceTasks,
+    //         [destination.droppableId]: updatedDestTasks,
+    //       });
+    //     }
+    //   };
+
+
+    const fetchTasks = async () => {
         const response = await axios.get("http://localhost:5000/tasks");
         const categorizedTasks = {
-          "To-Do": response.data.filter((task) => task.category === "To-Do"),
-          "In Progress": response.data.filter((task) => task.category === "In Progress"),
-          "Done": response.data.filter((task) => task.category === "Done"),
+          "To-Do": response.data.filter((task) => task.category === "To-Do").sort((a, b) => a.order - b.order),
+          "In Progress": response.data.filter((task) => task.category === "In Progress").sort((a, b) => a.order - b.order),
+          "Done": response.data.filter((task) => task.category === "Done").sort((a, b) => a.order - b.order),
         };
         setTasks(categorizedTasks);
       };
-    
-      const handleDragEnd = async (result) => {
+      
+
+    const handleDragEnd = async (result) => {
         if (!result.destination) return;
-    
+      
         const { source, destination } = result;
-        const taskMoved = tasks[source.droppableId][source.index];
-    
-        if (source.droppableId !== destination.droppableId) {
-          // Update backend
-          await axios.put(`http://localhost:5000/tasks/${taskMoved._id}`, { category: destination.droppableId });
-    
-          // Update frontend state
-          const updatedSourceTasks = [...tasks[source.droppableId]];
+        const sourceCategory = source.droppableId;
+        const destinationCategory = destination.droppableId;
+      
+        // Get the task that was moved
+        const taskMoved = tasks[sourceCategory][source.index];
+      
+        // If moved within the same category (reordering)
+        if (sourceCategory === destinationCategory) {
+          const updatedTasks = [...tasks[sourceCategory]];
+          updatedTasks.splice(source.index, 1);
+          updatedTasks.splice(destination.index, 0, taskMoved);
+      
+          setTasks({ ...tasks, [sourceCategory]: updatedTasks });
+      
+          // Update order in the backend (optional)
+          await axios.put(`http://localhost:5000/tasks/reorder`, {
+            category: sourceCategory,
+            tasks: updatedTasks.map((task, index) => ({ ...task, order: index })),
+          });
+        } else {
+          // Moving between categories
+          const updatedSourceTasks = [...tasks[sourceCategory]];
           updatedSourceTasks.splice(source.index, 1);
-    
-          const updatedDestTasks = [...tasks[destination.droppableId]];
-          updatedDestTasks.splice(destination.index, 0, { ...taskMoved, category: destination.droppableId });
-    
+      
+          const updatedDestTasks = [...tasks[destinationCategory]];
+          updatedDestTasks.splice(destination.index, 0, { ...taskMoved, category: destinationCategory });
+      
           setTasks({
             ...tasks,
-            [source.droppableId]: updatedSourceTasks,
-            [destination.droppableId]: updatedDestTasks,
+            [sourceCategory]: updatedSourceTasks,
+            [destinationCategory]: updatedDestTasks,
           });
+      
+          // Update backend with new category
+          await axios.put(`http://localhost:5000/tasks/${taskMoved._id}`, { category: destinationCategory });
         }
       };
 
+      
       const handleDelete = async (taskId) => {
         const confirm = await Swal.fire({
           title: "Are you sure?",

@@ -69,7 +69,7 @@ const Header = () => {
 
       <button
         onClick={() => setDarkMode(!darkMode)}
-        className="px-4 py-2 text-white font-bold rounded-md transition duration-300 bg-teal-500 hover:bg-teal-600 dark:bg-gray-800 dark:hover:bg-gray-700"
+        className="px-4 ml-7 py-2 text-white font-bold rounded-md transition duration-300 bg-teal-500 hover:bg-teal-600 dark:bg-gray-800 dark:hover:bg-gray-700"
       >
         {darkMode ? <FaSun className="text-amber-500"></FaSun> : <FaMoon className="text-black "></FaMoon>}
       </button>
