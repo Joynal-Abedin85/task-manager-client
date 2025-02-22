@@ -6,7 +6,7 @@ const Footer = () => {
     <div>
       
         <div>
-            <h2 className="bg-teal-300 text-center py-3  ">@all right reserved by MD Tareq</h2>
+            <h2 className="bg-[#8dc8ff] text-black text-center py-3  ">@all right reserved by MD Tareq</h2>
         </div>
     </div>
   );

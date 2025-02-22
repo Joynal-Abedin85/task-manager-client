@@ -33,7 +33,7 @@ const Header = () => {
     </>
   );
   return (
-    <div className="navbar sticky top-0 z-50 bg-black text-white">
+    <div className="navbar sticky top-0 z-50 bg-[#8dc8ff] text-blue-800">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -62,14 +62,14 @@ const Header = () => {
         <a className="btn btn-ghost text-xl ">Task<span className="font-bold text-teal-500">store</span></a>
       </div>
       <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">{item}</ul>
+        <ul className="menu ml-60 menu-horizontal px-1">{item}</ul>
       </div>
 
       <div>
 
       <button
         onClick={() => setDarkMode(!darkMode)}
-        className="px-4 ml-7 py-2 text-white font-bold rounded-md transition duration-300 bg-teal-500 hover:bg-teal-600 dark:bg-gray-800 dark:hover:bg-gray-700"
+        className="px-4 ml-10 py-2 text-white font-bold rounded-md transition duration-300 bg-teal-500 hover:bg-teal-600 dark:bg-gray-800 dark:hover:bg-gray-700"
       >
         {darkMode ? <FaSun className="text-amber-500"></FaSun> : <FaMoon className="text-black "></FaMoon>}
       </button>
@@ -103,7 +103,7 @@ const Header = () => {
           </li>
         </ul>
       </div>) :(<div className="navbar-end">
-        <NavLink to='/signin' className="btn font-bold text-teal-500 ">Sign In</NavLink>
+        <NavLink to='/signin' className="btn font-bold text-[#184d7e] ">Sign In</NavLink>
       </div>) 
       }
       

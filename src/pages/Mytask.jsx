@@ -149,7 +149,7 @@ const Mytask = () => {
     
     
     return (
-        <div className="  bg-gradient-to-br from-green-400 to-blue-500 flex justify-center items-center p-10">
+        <div className="  bg-gradient-to-br from-[#8dc8ff] to-blue-600 flex justify-center items-center p-10">
         <div className="w-full overflow-y-auto my-10 h-screen  max-w-5xl bg-white p-6 rounded-lg shadow-lg">
           <h1 className="text-3xl  font-bold text-center text-gray-800 mb-5">Task Manager</h1>
   
