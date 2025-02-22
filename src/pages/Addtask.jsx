@@ -17,7 +17,7 @@ const Addtask = () => {
 
     try {
       const newTask = { title, description, category };
-      await axios.post("http://localhost:5000/tasks", newTask);
+      await axios.post("https://job-task-server-dusky.vercel.app/tasks", newTask);
       
       Swal.fire({
         title: "Success!",

@@ -24,7 +24,7 @@ const Mytask = () => {
       }, []);
     
     //   const fetchTasks = async () => {
-    //     const response = await axios.get("http://localhost:5000/tasks");
+    //     const response = await axios.get("https://job-task-server-dusky.vercel.app/tasks");
     //     const categorizedTasks = {
     //       "To-Do": response.data.filter((task) => task.category === "To-Do"),
     //       "In Progress": response.data.filter((task) => task.category === "In Progress"),
@@ -41,7 +41,7 @@ const Mytask = () => {
     
     //     if (source.droppableId !== destination.droppableId) {
     //       // Update backend
-    //       await axios.put(`http://localhost:5000/tasks/${taskMoved._id}`, { category: destination.droppableId });
+    //       await axios.put(`https://job-task-server-dusky.vercel.app/tasks/${taskMoved._id}`, { category: destination.droppableId });
     
     //       // Update frontend state
     //       const updatedSourceTasks = [...tasks[source.droppableId]];
@@ -60,7 +60,7 @@ const Mytask = () => {
 
 
     const fetchTasks = async () => {
-        const response = await axios.get("http://localhost:5000/tasks");
+        const response = await axios.get("https://job-task-server-dusky.vercel.app/tasks");
         const categorizedTasks = {
           "To-Do": response.data.filter((task) => task.category === "To-Do").sort((a, b) => a.order - b.order),
           "In Progress": response.data.filter((task) => task.category === "In Progress").sort((a, b) => a.order - b.order),
@@ -89,7 +89,7 @@ const Mytask = () => {
           setTasks({ ...tasks, [sourceCategory]: updatedTasks });
       
           // Update order in the backend (optional)
-          await axios.put(`http://localhost:5000/tasks/reorder`, {
+          await axios.put(`https://job-task-server-dusky.vercel.app/tasks/reorder`, {
             category: sourceCategory,
             tasks: updatedTasks.map((task, index) => ({ ...task, order: index })),
           });
@@ -108,7 +108,7 @@ const Mytask = () => {
           });
       
           // Update backend with new category
-          await axios.put(`http://localhost:5000/tasks/${taskMoved._id}`, { category: destinationCategory });
+          await axios.put(`https://job-task-server-dusky.vercel.app/tasks/${taskMoved._id}`, { category: destinationCategory });
         }
       };
 
@@ -124,7 +124,7 @@ const Mytask = () => {
         });
     
         if (confirm.isConfirmed) {
-          await axios.delete(`http://localhost:5000/tasks/${taskId}`);
+          await axios.delete(`https://job-task-server-dusky.vercel.app/tasks/${taskId}`);
           Swal.fire("Deleted!", "Your task has been deleted.", "success");
           fetchTasks();
         }
@@ -137,7 +137,7 @@ const Mytask = () => {
       };
     
       const saveEdit = async () => {
-        await axios.put(`http://localhost:5000/tasks/${editTask._id}`, {
+        await axios.put(`https://job-task-server-dusky.vercel.app/tasks/${editTask._id}`, {
           title: editedTitle,
           description: editedDescription,
         });

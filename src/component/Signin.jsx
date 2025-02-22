@@ -24,7 +24,7 @@ const Signin = () => {
       const lastSignInTime = res?.user?.metadata?.lastSignInTime;
       const loginfo = {email , lastSignInTime}
 
-      fetch('http://localhost:5000/users', {
+      fetch('https://job-task-server-dusky.vercel.app/users', {
         method: 'PATCH',
         headers: {
           'content-type': 'application/json'
