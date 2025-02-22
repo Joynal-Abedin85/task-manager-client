@@ -17,46 +17,13 @@ const Mytask = () => {
       const [editedTitle, setEditedTitle] = useState("");
       const [editedDescription, setEditedDescription] = useState("");
     
-    
+      const [selectedCategory, setSelectedCategory] = useState("all");
     
       useEffect(() => {
         fetchTasks();
       }, []);
     
-    //   const fetchTasks = async () => {
-    //     const response = await axios.get("https://job-task-server-dusky.vercel.app/tasks");
-    //     const categorizedTasks = {
-    //       "To-Do": response.data.filter((task) => task.category === "To-Do"),
-    //       "In Progress": response.data.filter((task) => task.category === "In Progress"),
-    //       "Done": response.data.filter((task) => task.category === "Done"),
-    //     };
-    //     setTasks(categorizedTasks);
-    //   };
-    
-    //   const handleDragEnd = async (result) => {
-    //     if (!result.destination) return;
-    
-    //     const { source, destination } = result;
-    //     const taskMoved = tasks[source.droppableId][source.index];
-    
-    //     if (source.droppableId !== destination.droppableId) {
-    //       // Update backend
-    //       await axios.put(`https://job-task-server-dusky.vercel.app/tasks/${taskMoved._id}`, { category: destination.droppableId });
-    
-    //       // Update frontend state
-    //       const updatedSourceTasks = [...tasks[source.droppableId]];
-    //       updatedSourceTasks.splice(source.index, 1);
-    
-    //       const updatedDestTasks = [...tasks[destination.droppableId]];
-    //       updatedDestTasks.splice(destination.index, 0, { ...taskMoved, category: destination.droppableId });
-    
-    //       setTasks({
-    //         ...tasks,
-    //         [source.droppableId]: updatedSourceTasks,
-    //         [destination.droppableId]: updatedDestTasks,
-    //       });
-    //     }
-    //   };
+
 
 
     const fetchTasks = async () => {
@@ -150,30 +117,47 @@ const Mytask = () => {
     
     return (
         <div className="  bg-gradient-to-br from-[#8dc8ff] to-blue-600 flex justify-center items-center p-10">
-        <div className="w-full overflow-y-auto my-10 h-screen  max-w-5xl bg-white p-6 rounded-lg shadow-lg">
-          <h1 className="text-3xl  font-bold text-center text-gray-800 mb-5">Task Manager</h1>
-  
-          <DragDropContext onDragEnd={handleDragEnd}>
-            <div className="grid  overflow-y-auto grid-cols-3 gap-4">
-              {Object.keys(tasks).map((category) => (
-                <Droppable key={category} droppableId={category}>
-                  {(provided) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.droppableProps}
-                      className="bg-gray-200  p-4 rounded-lg min-h-[400px]"
-                    >
-                      <h2 className="text-xl  font-semibold mb-3 text-purple-700">{category}</h2>
-                      {tasks[category].map((task, index) => (
-                        <Draggable key={task._id} draggableId={task._id} index={index}>
-                          {(provided) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                              className="p-3 bg-white rounded shadow-lg mb-2"
-                            >
-                               <div>
+       
+
+<div className="w-full overflow-y-auto my-10 h-screen max-w-5xl bg-white p-6 rounded-lg shadow-lg">
+      <h1 className="text-3xl font-bold text-center text-gray-800 mb-5">Task Manager</h1>
+      
+      {/* Dropdown for Mobile View */}
+      <div className="md:hidden mb-4">
+        <select
+          value={selectedCategory}
+          onChange={(e) => setSelectedCategory(e.target.value)}
+          className="w-full p-2 border rounded-lg"
+        >
+          <option value="all">Show All</option>
+          {Object.keys(tasks).map((category) => (
+            <option key={category} value={category}>{category}</option>
+          ))}
+        </select>
+      </div>
+
+      <DragDropContext onDragEnd={handleDragEnd}>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {Object.keys(tasks).map((category) => (
+            (selectedCategory === "all" || selectedCategory === category || window.innerWidth >= 768) && (
+              <Droppable key={category} droppableId={category}>
+                {(provided) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                    className="bg-gray-200 p-4 rounded-lg min-h-[400px] transition-all"
+                  >
+                    <h2 className="text-xl font-semibold mb-3 text-purple-700">{category}</h2>
+                    {tasks[category].map((task, index) => (
+                      <Draggable key={task._id} draggableId={task._id} index={index}>
+                        {(provided) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            className="p-3 bg-white rounded shadow-lg mb-2"
+                          >
+                            <div>
                               <p className="font-semibold">{task.title}</p>
                               <p className="text-sm text-gray-600">{task.description}</p>
                             </div>
@@ -191,18 +175,19 @@ const Mytask = () => {
                                 <FaTrash size={18} />
                               </button>
                             </div>
-                            </div>
-                          )}
-                        </Draggable>
-                      ))}
-                      {provided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-              ))}
-            </div>
-          </DragDropContext>
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            )
+          ))}
         </div>
+      </DragDropContext>
+    </div>
 
         {editTask && (
         <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50">
