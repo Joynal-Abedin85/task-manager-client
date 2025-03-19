@@ -4,6 +4,9 @@ import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import Swal from 'sweetalert2';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 
+import Shepherd from 'shepherd.js';
+import 'shepherd.js/dist/css/shepherd.css';
+
 
 const Mytask = () => {
     
@@ -101,6 +104,29 @@ const Mytask = () => {
         setEditTask(task);
         setEditedTitle(task.title);
         setEditedDescription(task.description);
+
+        
+  // Start the Shepherd.js tour dynamically
+  const tour = new Shepherd.Tour({
+    useModalOverlay: true,
+    defaultStepOptions: { classes: 'shadow-md bg-purple-500 text-white', scrollTo: true }
+  });
+
+  tour.addStep({
+    id: 'edit-fields',
+    text: 'Modify the title and description here.',
+    attachTo: { element: '.edit-fields', on: 'top' },
+    buttons: [{ text: 'Next', action: tour.next }]
+  });
+
+  tour.addStep({
+    id: 'save-task',
+    text: 'Click save to update the task.',
+    attachTo: { element: '.save-btn', on: 'right' },
+    buttons: [{ text: 'Finish', action: tour.complete }]
+  });
+
+  tour.start();
       };
     
       const saveEdit = async () => {
@@ -113,6 +139,33 @@ const Mytask = () => {
         Swal.fire("Updated!", "Your task has been updated.", "success");
         fetchTasks();
       };
+
+
+       // Shepherd Tour Setup
+  useEffect(() => {
+    const tour = new Shepherd.Tour({
+      useModalOverlay: true,
+      defaultStepOptions: { classes: 'shadow-md bg-purple-500 text-white', scrollTo: true }
+    });
+
+    tour.addStep({
+      id: 'delete-task',
+      text: 'Click here to delete a task.',
+      attachTo: { element: '.delete-btn', on: 'right' },
+      buttons: [{ text: 'Next', action: tour.next }]
+    });
+
+    tour.addStep({
+      id: 'edit-task',
+      text: 'Click here to edit a task.',
+      attachTo: { element: '.edit-btn', on: 'right' },
+      buttons: [{ text: 'Next', action: tour.next }]
+    });
+
+
+    tour.start();
+  }, []);
+
     
     
     return (
@@ -164,13 +217,13 @@ const Mytask = () => {
                             <div className="flex mt-5 justify-between gap-2">
                               <button
                                 onClick={() => handleEdit(task)}
-                                className="px-2 py-1 text-xs bg-blue-500 text-white rounded"
+                                className="px-2 edit-btn py-1 text-xs bg-blue-500 text-white rounded"
                               >
                                 <FaEdit size={18} />
                               </button>
                               <button
                                 onClick={() => handleDelete(task?._id)}
-                                className="px-2 py-1 text-xs bg-red-500 text-white rounded"
+                                className="px-2 delete-btn py-1 text-xs bg-red-500 text-white rounded"
                               >
                                 <FaTrash size={18} />
                               </button>
@@ -197,12 +250,12 @@ const Mytask = () => {
               type="text"
               value={editedTitle}
               onChange={(e) => setEditedTitle(e.target.value)}
-              className="w-full p-2 border rounded mb-2"
+              className="w-full edit-fields p-2 border rounded mb-2"
             />
             <textarea
               value={editedDescription}
               onChange={(e) => setEditedDescription(e.target.value)}
-              className="w-full p-2 border rounded mb-2"
+              className="w-full edit-fields p-2 border rounded mb-2"
             ></textarea>
             <div className="flex justify-end gap-2">
               <button
@@ -211,7 +264,7 @@ const Mytask = () => {
               >
                 Cancel
               </button>
-              <button onClick={saveEdit} className="px-3 py-1 bg-green-500 text-white rounded">
+              <button onClick={saveEdit} className="px-3 py-1 save-btn bg-green-500 text-white rounded">
                 Save
               </button>
             </div>
